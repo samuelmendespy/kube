@@ -1,0 +1,25 @@
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: mongodb
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_INITDB_ROOT_USERNAME}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_INITDB_ROOT_PASSWORD}
+      - MONGODB_INITDB_DATABASE=mydatabase
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+    
+  quarkus-app:
+    build:
+      context: ./my-api
+      dockerfile: src/main/docker/Dockerfile.native-micro
+    container_name: quarkus-app
+    ports:
+      - "8080:8080"
+    environment:
+      - QUARKUS_PROFILE=dev
+    depends_on:
+      - mongodb

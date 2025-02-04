@@ -8,4 +8,8 @@ public class Post extends PanacheMongoEntity {
     public String image;
     public String user;
     public LocalDateTime createdAt;
+
+    public Post() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
